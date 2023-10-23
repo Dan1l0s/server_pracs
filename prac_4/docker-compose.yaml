@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+    db:
+        container_name: db
+        image: mysql
+        volumes:
+            - db_data:/var/lib/mysql
+            - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: appDB
+            MYSQL_USER: user
+            MYSQL_PASSWORD: password
+
+    web-server:
+        container_name: web-server
+        build: .
+        ports:
+            - 8000:80
+        restart: always
+        volumes:
+            - ./html:/var/www/html/
+        links:
+            - db
+
+    nginx:
+        container_name: nginx
+        image: nginx
+        privileged: true
+        user: root
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./nginx/pages:/usr/share/nginx/html
+        restart: always
+        ports:
+            - 8001:80
+        build: nginx/
+
+volumes:
+    db_data:
