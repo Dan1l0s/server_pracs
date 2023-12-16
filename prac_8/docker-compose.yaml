@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+    web-service:
+        build:
+            context: ./go
+            dockerfile: Dockerfile
+        ports:
+            - "8080:80"
+        restart: always
+
+    nginx:
+        container_name: nginx
+        image: nginx
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./nginx/html:/usr/share/nginx/html
+        restart: always
+        ports:
+            - "8000:80"
+        build: nginx/
