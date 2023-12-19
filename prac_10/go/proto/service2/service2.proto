@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package service2;
+
+option go_package = "./proto/service2";
+
+import "google/api/annotations.proto";
+
+service service2 {
+
+  rpc ToBin (ConvertRequest) returns (ConvertResponse){
+    option (google.api.http) = {
+      post: "/bin"
+      body: "*"
+    };
+  };
+
+  rpc ToDec (ConvertRequest) returns (ConvertResponse){
+    option (google.api.http) = {
+      post: "/dec"
+      body: "*"
+    };
+  };
+
+}
+
+message ConvertRequest {
+  string message = 1;
+}
+
+message ConvertResponse {
+  string answer = 1;
+}

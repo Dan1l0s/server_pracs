@@ -1,0 +1,130 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/service2/service2.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "service2"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/bin": {
+      "post": {
+        "operationId": "service2_ToBin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/service2ConvertResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/service2ConvertRequest"
+            }
+          }
+        ],
+        "tags": [
+          "service2"
+        ]
+      }
+    },
+    "/dec": {
+      "post": {
+        "operationId": "service2_ToDec",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/service2ConvertResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/service2ConvertRequest"
+            }
+          }
+        ],
+        "tags": [
+          "service2"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "service2ConvertRequest": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "service2ConvertResponse": {
+      "type": "object",
+      "properties": {
+        "answer": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
