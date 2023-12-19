@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+
+  gogogo:
+    depends_on:
+      - mongodb
+      - pypypy
+    build:
+      context: ./
+      dockerfile: docker-9/Dockerfile
+    ports:
+      - '8080:8080'
+    restart: always
+
+  mongodb:
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    ports:
+      - '27017:27017'
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1234
+    volumes:
+      - ./docker-11/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - '5432:5432'
+
+  pypypy:
+    depends_on:
+      - postgres
+    build:
+      context: ./
+      dockerfile: docker-11/Dockerfile
+    ports:
+      - '8888:8888'
+    command: bash -c "
+        python prac11/manage.py makemigrations &&
+        python prac11/manage.py migrate &&
+        python prac11/manage.py runserver 0.0.0.0:8888
+        "
+

@@ -1,0 +1,25 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Analysis</title>
+    <style>
+        div > .img-div{
+            width: 40%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        {% for img in image %}
+        <div class="img-div" >
+            <img src="{{img}}" style="width:100%"/>
+        </div>
+        {% endfor %}    
+    </div>
+</body>
+</html>
