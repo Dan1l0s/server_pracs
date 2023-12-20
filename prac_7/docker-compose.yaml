@@ -1,0 +1,54 @@
+version: "3"
+
+services:
+
+  db-auth:
+    image: redis:latest
+    ports:
+      - '6379:6379'
+
+  app-auth:
+    depends_on:
+      - db-auth
+    build:
+      context: ./prac7-auth
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    restart: always
+    links:
+      - db-auth
+
+  flyway:
+    image: flyway/flyway:10.0.0
+    command: -configFiles=/flyway/conf/flyway.properties -locations=filesystem:/flyway/migration -connectRetries=60 migrate
+    volumes:
+      - ./prac7/postgres/migration:/flyway/migration
+      - ./prac7/flyway.properties:/flyway/conf/flyway.properties
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: db_prac7
+    ports:
+      - '5432:5432'
+
+  app:
+    depends_on:
+      - db
+    build:
+      context: ./prac7
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8000'
+    restart: always
+    links:
+      - db
+
+volumes:
+  db:
+    driver: local

@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+
+  flyway:
+    image: flyway/flyway:10.0.0
+    command: -configFiles=/flyway/conf/flyway.properties -locations=filesystem:/flyway/migration -connectRetries=60 migrate
+    volumes:
+      - ./postgres/migration:/flyway/migration
+      - ./flyway.properties:/flyway/conf/flyway.properties
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: db_prac7
+#    volumes:
+#      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - '5432:5432'
+
+  app:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8000'
+    restart: always
+    links:
+      - db
+
+volumes:
+  db:
+    driver: local
